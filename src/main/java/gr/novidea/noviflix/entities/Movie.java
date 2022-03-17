@@ -1,4 +1,4 @@
-package gr.novidea.nietflix.entities;
+package gr.novidea.noviflix.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

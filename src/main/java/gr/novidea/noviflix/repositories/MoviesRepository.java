@@ -1,6 +1,6 @@
-package gr.novidea.nietflix.repositories;
+package gr.novidea.noviflix.repositories;
 
-import gr.novidea.nietflix.entities.Movie;
+import gr.novidea.noviflix.entities.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

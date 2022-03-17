@@ -1,10 +1,10 @@
-package gr.novidea.nietflix;
+package gr.novidea.noviflix;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class NietflixApplicationTests {
+class NoviflixApplicationTests {
 
 	@Test
 	void contextLoads() {

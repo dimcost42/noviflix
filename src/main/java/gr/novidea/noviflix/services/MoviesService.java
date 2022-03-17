@@ -1,6 +1,6 @@
-package gr.novidea.nietflix.services;
+package gr.novidea.noviflix.services;
 
-import gr.novidea.nietflix.entities.Movie;
+import gr.novidea.noviflix.entities.Movie;
 
 import java.util.List;
 import java.util.UUID;

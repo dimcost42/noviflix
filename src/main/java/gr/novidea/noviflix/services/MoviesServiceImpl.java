@@ -1,7 +1,7 @@
-package gr.novidea.nietflix.services;
+package gr.novidea.noviflix.services;
 
-import gr.novidea.nietflix.entities.Movie;
-import gr.novidea.nietflix.repositories.MoviesRepository;
+import gr.novidea.noviflix.entities.Movie;
+import gr.novidea.noviflix.repositories.MoviesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

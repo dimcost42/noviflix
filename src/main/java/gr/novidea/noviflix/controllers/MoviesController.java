@@ -1,7 +1,7 @@
-package gr.novidea.nietflix.controllers;
+package gr.novidea.noviflix.controllers;
 
-import gr.novidea.nietflix.entities.Movie;
-import gr.novidea.nietflix.services.MoviesService;
+import gr.novidea.noviflix.entities.Movie;
+import gr.novidea.noviflix.services.MoviesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

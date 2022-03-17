@@ -17,4 +17,8 @@ public interface MoviesService {
 
     Boolean deleteMovie (UUID id);
 
+    Boolean findMovieByTitle(String title);
+
+    Movie findMovieFromTitle(String title);
+
 }

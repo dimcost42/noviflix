@@ -64,4 +64,13 @@ public class Movie {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", director='" + director + '\'' +
+                ", plot='" + plot + '\'' +
+                '}';
+    }
 }

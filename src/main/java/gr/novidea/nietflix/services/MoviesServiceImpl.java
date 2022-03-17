@@ -5,6 +5,7 @@ import gr.novidea.nietflix.repositories.MoviesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,7 +30,8 @@ public class MoviesServiceImpl implements MoviesService {
 
     @Override
     public Movie addMovie(Movie movie) {
-        return moviesRepository.saveAndFlush(movie);
+        Optional<Movie> isMovieExists = moviesRepository.findMovieByTitleEquals(movie.getTitle());
+        return isMovieExists.orElseGet(() -> moviesRepository.saveAndFlush(movie));
     }
 
     @Override
@@ -51,5 +53,20 @@ public class MoviesServiceImpl implements MoviesService {
     public Boolean deleteMovie(UUID id) {
         moviesRepository.deleteById(id);
         return moviesRepository.findById(id).isEmpty();
+    }
+
+    @Override
+    public Boolean findMovieByTitle(String title) {
+        Optional<Movie> isMovieExists = moviesRepository.findMovieByTitleEquals(title);
+        return isMovieExists.isPresent();
+    }
+
+    @Override
+    public Movie findMovieFromTitle(String title) {
+        Optional<Movie> isMovieExists = moviesRepository.findMovieByTitleEquals(title);
+        if (isMovieExists.isPresent()){
+            return isMovieExists.get();
+        }
+        return null;
     }
 }

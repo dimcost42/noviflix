@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @RestController
@@ -60,5 +61,14 @@ public class MoviesController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/movies/whatsnext")
+    public ResponseEntity<Movie> getRandomMovie() {
+        List<Movie> movieList = moviesService.getMovies();
+        if (movieList.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Movie movie = movieList.get(new Random().nextInt(movieList.size()));
+        return new ResponseEntity<>(movie, HttpStatus.OK);
+    }
 
 }

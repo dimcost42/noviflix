@@ -13,7 +13,7 @@ In order to <b>add</b> a movie use:<br/><br/>
 
 <hr/>
 
-In order to <b>update</b> a movie use:<br/>
+In order to <b>update</b> a movie use:<br/><br/>
     <b>PUT</b> localhost:8085/api/v1/movies/{id}<br/>
     
   JsonMessage:<br/>

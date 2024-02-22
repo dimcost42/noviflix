@@ -38,7 +38,7 @@ public class MoviesController {
 
         if (moviesService.findMovieByTitle(movie.getTitle())) {
             Movie movie1 = moviesService.findMovieFromTitle(movie.getTitle());
-            httpHeaders.add("Movie alredy exists", "/api/v1/movies/" + movie1.getId().toString());
+            httpHeaders.add("Movie already exists", "/api/v1/movies/" + movie1.getId().toString());
             return new ResponseEntity<>(movie1, httpHeaders, HttpStatus.CONFLICT);
         }
 
@@ -73,7 +73,7 @@ public class MoviesController {
     @GetMapping("/movies/whatsnext")
     public ResponseEntity<Movie> getRandomMovie() {
         List<Movie> movieList = moviesService.getMovies();
-        if (movieList.size() == 0) {
+        if (movieList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Movie movie = movieList.get(new Random().nextInt(movieList.size()));
@@ -128,11 +128,9 @@ public class MoviesController {
         moviesList.add(movie6);
         moviesList.add(movie7);
 
-        for (Movie m : moviesList) {
-            moviesService.addMovie(m);
-            System.out.println(m.toString());
-        }
-        return new ResponseEntity<List<Movie>>(moviesService.getMovies(), HttpStatus.OK);
+        moviesList.forEach(moviesService::addMovie);
+
+        return new ResponseEntity<>(moviesService.getMovies(), HttpStatus.OK);
     }
 
 }

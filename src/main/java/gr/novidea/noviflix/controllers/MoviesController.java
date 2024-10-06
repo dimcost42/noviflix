@@ -58,10 +58,10 @@ public class MoviesController {
     @PutMapping("/movies/{id}")
     public ResponseEntity<Movie> udpateMovie(@RequestBody Movie movie, @PathVariable("id") UUID id) {
 
-        if (moviesService.findMovieByTitle(movie.getTitle())) {
-            Movie movie1 = moviesService.findMovieFromTitle(movie.getTitle());
-            return new ResponseEntity<>(movie1, HttpStatus.CONFLICT);
-        }
+//        if (moviesService.findMovieByTitle(movie.getTitle())) {
+//            Movie movie1 = moviesService.findMovieFromTitle(movie.getTitle());
+//            return new ResponseEntity<>(movie1, HttpStatus.CONFLICT);
+//        }
 
         if (moviesService.updateMovie(id, movie)) {
             return new ResponseEntity<>(movie, HttpStatus.OK);

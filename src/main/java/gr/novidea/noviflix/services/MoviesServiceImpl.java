@@ -41,7 +41,7 @@ public class MoviesServiceImpl implements MoviesService {
             m.setDirector(movie.getDirector());
             m.setPlot(movie.getPlot());
             m.setTitle(movie.getTitle());
-            moviesRepository.saveAndFlush(movie);
+            moviesRepository.saveAndFlush(m);
             return true;
         }
 

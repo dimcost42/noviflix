@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface MoviesRepository extends JpaRepository <Movie, UUID> {
+public interface MoviesRepository extends JpaRepository <Movie, Long> {
 
     Optional<Movie> findMovieByTitleEquals(String title);
 

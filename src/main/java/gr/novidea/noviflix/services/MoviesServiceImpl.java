@@ -22,7 +22,7 @@ public class MoviesServiceImpl implements MoviesService {
     }
 
     @Override
-    public Movie getMovie(UUID id) {
+    public Movie getMovie(Long id) {
         Optional<Movie> movieOptional = moviesRepository.findById(id);
         return movieOptional.orElse(null);
     }
@@ -34,7 +34,7 @@ public class MoviesServiceImpl implements MoviesService {
     }
 
     @Override
-    public Boolean updateMovie(UUID id, Movie movie) {
+    public Boolean updateMovie(Long id, Movie movie) {
         Optional<Movie> movieOptional = moviesRepository.findById(id);
         if (movieOptional.isPresent()) {
             Movie m = movieOptional.get();
@@ -49,7 +49,7 @@ public class MoviesServiceImpl implements MoviesService {
     }
 
     @Override
-    public Boolean deleteMovie(UUID id) {
+    public Boolean deleteMovie(Long id) {
         moviesRepository.deleteById(id);
         return moviesRepository.findById(id).isEmpty();
     }

@@ -21,7 +21,7 @@ public class Movie {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Long id;
 
     @Column(name = "title", nullable = true)
     private String title;
@@ -56,12 +56,18 @@ public class Movie {
         this.plot = plot;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Movie(String title, String director, String plot) {
+        this.title = title;
+        this.director = director;
+        this.plot = plot;
     }
 
     @Override

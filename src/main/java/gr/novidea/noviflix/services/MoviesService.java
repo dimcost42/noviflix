@@ -9,13 +9,13 @@ public interface MoviesService {
 
     List<Movie> getMovies();
 
-    Movie getMovie (UUID id);
+    Movie getMovie (Long id);
 
     Movie addMovie (Movie movie);
 
-    Boolean updateMovie (UUID id, Movie movie);
+    Boolean updateMovie (Long id, Movie movie);
 
-    Boolean deleteMovie (UUID id);
+    Boolean deleteMovie (Long id);
 
     Boolean findMovieByTitle(String title);
 

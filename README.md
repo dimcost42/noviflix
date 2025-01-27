@@ -30,7 +30,7 @@ Welcome to the **NoviFlix API**, a Spring Boot-based RESTful API for managing mo
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/noviflix-api.git
+   git clone https://github.com/dimcost42/noviflix-api.git
    cd noviflix-api
    ```
 2. Build the project:

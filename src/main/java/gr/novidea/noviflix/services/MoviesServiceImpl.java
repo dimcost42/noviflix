@@ -55,7 +55,7 @@ public class MoviesServiceImpl implements MoviesService {
     }
 
     @Override
-    public Boolean findMovieByTitle(String title) {
+    public Boolean existingMovieByTitle(String title) {
         Optional<Movie> isMovieExists = moviesRepository.findMovieByTitleEquals(title);
         return isMovieExists.isPresent();
     }

@@ -2,12 +2,17 @@ package gr.novidea.noviflix.controllers;
 
 import gr.novidea.noviflix.entities.Movie;
 import gr.novidea.noviflix.services.MoviesService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
@@ -20,49 +25,83 @@ public class MoviesController {
         this.moviesService = moviesService;
     }
 
+    @Operation(summary = "Get all movies", description = "Retrieve a list of all movies in the database.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of movies retrieved successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class)))
+    })
     @GetMapping("/movies")
     public ResponseEntity<List<Movie>> getAllMovies() {
-        List<Movie> movies = moviesService.getMovies();
-        return ResponseEntity.ok(movies);
+        return ResponseEntity.ok(moviesService.getMovies());
     }
 
+    @Operation(summary = "Get movie by ID", description = "Retrieve a movie by its unique ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Movie retrieved successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
+            @ApiResponse(responseCode = "404", description = "Movie not found")
+    })
     @GetMapping("/movies/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable("id") Long id) {
+    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         Movie movie = moviesService.getMovie(id);
-        return movie == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(movie);
+        return movie != null ? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Add a new movie", description = "Add a new movie to the database.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Movie created successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
+            @ApiResponse(responseCode = "409", description = "Movie with the same title already exists")
+    })
     @PostMapping("/movies")
     public ResponseEntity<Movie> addMovie(@RequestBody Movie movie) {
-        if (moviesService.findMovieByTitle(movie.getTitle())) {
+        if (moviesService.existingMovieByTitle(movie.getTitle())) {
             Movie existingMovie = moviesService.findMovieFromTitle(movie.getTitle());
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Movie already exists", "/api/v1/movies/" + existingMovie.getId());
-            return new ResponseEntity<>(existingMovie, headers, HttpStatus.CONFLICT);
+            return ResponseEntity.status(409).body(existingMovie);
         }
-
         Movie newMovie = moviesService.addMovie(movie);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/movies/" + newMovie.getId());
-        return new ResponseEntity<>(newMovie, headers, HttpStatus.CREATED);
+        return ResponseEntity.status(201).body(newMovie);
     }
 
+    @Operation(summary = "Delete a movie", description = "Delete a movie by its unique ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Movie deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Movie not found")
+    })
     @DeleteMapping("/movies/{id}")
-    public ResponseEntity<Void> deleteMovieById(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteMovieById(@PathVariable Long id) {
         return moviesService.deleteMovie(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Update a movie", description = "Update the details of an existing movie.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Movie updated successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
+            @ApiResponse(responseCode = "404", description = "Movie not found"),
+            @ApiResponse(responseCode = "409", description = "Conflict with an existing movie title")
+    })
     @PutMapping("/movies/{id}")
-    public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie, @PathVariable("id") Long id) {
-        if (moviesService.findMovieByTitle(movie.getTitle())) {
-            Movie existingMovie = moviesService.findMovieFromTitle(movie.getTitle());
-            return new ResponseEntity<>(existingMovie, HttpStatus.CONFLICT);
+    public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie, @PathVariable Long id) {
+        Movie existingMovie = moviesService.getMovie(id);
+        if (existingMovie == null) {
+            return ResponseEntity.notFound().build();
         }
 
-        boolean updated = moviesService.updateMovie(id, movie);
-        return updated ? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
+        Movie movieWithSameTitle = moviesService.findMovieFromTitle(movie.getTitle());
+        if (movieWithSameTitle != null && !movieWithSameTitle.getId().equals(id)) {
+            return ResponseEntity.status(409).body(existingMovie);
+        }
+
+        boolean isUpdated = moviesService.updateMovie(id, movie);
+        return isUpdated ? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Get a random movie", description = "Retrieve a random movie from the database.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Random movie retrieved successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
+            @ApiResponse(responseCode = "404", description = "No movies available")
+    })
     @GetMapping("/movies/whatsnext")
     public ResponseEntity<Movie> getRandomMovie() {
         List<Movie> movieList = moviesService.getMovies();
@@ -74,6 +113,11 @@ public class MoviesController {
         return ResponseEntity.ok(randomMovie);
     }
 
+    @Operation(summary = "Load sample movies", description = "Load a set of predefined movies into the database.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sample movies loaded successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class)))
+    })
     @GetMapping("/loadmovies")
     public ResponseEntity<List<Movie>> initializeData() {
         List<Movie> moviesList = Arrays.asList(

@@ -3,7 +3,6 @@ package gr.novidea.noviflix.services;
 import gr.novidea.noviflix.entities.Movie;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface MoviesService {
 
@@ -17,7 +16,7 @@ public interface MoviesService {
 
     Boolean deleteMovie (Long id);
 
-    Boolean findMovieByTitle(String title);
+    Boolean existingMovieByTitle(String title);
 
     Movie findMovieFromTitle(String title);
 
